@@ -93,3 +93,6 @@ ENV/
 
 #Helm Dependency
 helm/chart/teresa/charts
+
+#Goland
+.idea

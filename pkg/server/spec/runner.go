@@ -67,10 +67,11 @@ func (b *RunnerPodBuilder) newAppRunnerPod(appContainer *Container) *Pod {
 
 	if b.nginxImage != "" {
 		nc := NewNginxContainer(b.nginxImage, b.app)
-		nVol := ShareVolumeBetweenAppAndSideCar(sharedVolumeName, sharedVolumeMountPath)
+		dataVolume := ShareVolumeBetweenAppAndSideCar(sharedVolumeName, sharedVolumeMountPath)
+		secretVolume := ShareVolumeBetweenAppAndSideCar(app.TeresaAppSecrets, app.SecretPath)
 		nCm := MountConfigMapInSideCar(nginxVolName, nginxConfTmplDir, b.app.Name)
 
-		builder = builder.WithSideCar(nc, nVol, nCm, SwitchPortWithAppContainer)
+		builder = builder.WithSideCar(nc, dataVolume, secretVolume, nCm, SwitchPortWithAppContainer)
 	}
 
 	if b.csp != nil {
